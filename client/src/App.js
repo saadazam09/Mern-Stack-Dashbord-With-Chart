@@ -1,29 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
-import { CssBaseline , ThemeProvider, } from '@mui/material';
+import React, { useMemo } from 'react';
+import { CssBaseline, ThemeProvider } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
-import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { themeSettings } from './Them';
-import { BrowserRouter, Navigate, Route, Router } from 'react-router-dom';
-import { Dashboard } from './scene/dashboard';
-import layout from './Layout/index.jsx';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { themeSettings } from './Them';  // Ensure correct import path
+import Dashboard from './scene/dashboard';
+import Layout from './scene/Layout';
+
 const App = () => {
   const mode = useSelector((state) => state.global.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
 
   return (
-   <BrowserRouter>
-   <ThemeProvider theme={theme}>
-          <CssBaseline/> 
-          <Router>
-            <Route element={<layout/>} />
-            <Route path='/' element={<Navigate to="/dashbord" replace />}/>
-            <Route path= "/dashboard" element={<Dashboard/>}/>
-          </Router>
+    <BrowserRouter>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Routes>
+          <Route element={<Layout />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+          </Route>
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        </Routes>
       </ThemeProvider>
-   </BrowserRouter>
-      
+    </BrowserRouter>
   );
 };
 
