@@ -37,6 +37,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 
+import user from "./models/User.js";
+import { dataUser } from "./data/data.js";
+
 /* ROUTES */
 app.use("/client", clientRoutes);
 app.use("/general", generalRoutes);
@@ -52,6 +55,6 @@ mongoose
   .then(() => {
     app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
 
-
+      User.insertMany(dataUser);
   })
   .catch((error) => console.log(`${error} did not connect`));
