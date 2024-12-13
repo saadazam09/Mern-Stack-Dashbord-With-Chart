@@ -1,38 +1,36 @@
-import React from 'react'
-// import { useState } from 'react'
-import { Box, useMediaQuery } from '@mui/material'
-// const { Outlet, data } = require("react-router-dom");
-import Navbar from "../../component/Navbar";
-import Sidebar from "../../component/Sidebar";
-import { useSelector } from 'react-redux';
+import React, { useState } from "react";
+import { Box, useMediaQuery } from "@mui/material";
+import { Outlet } from "react-router-dom";
+import { useSelector } from "react-redux";
+import Navbar from "component/Navbar";
+import Sidebar from "component/Sidebar";
+import { useGetUserQuery } from "state/api"; 
 
-/**
- * This component is the main layout component of the app.
- * It renders the sidebar and the navbar, and also handles the
- * state of the sidebar (open or closed) and the media query
- * to determine if the app is running on a mobile device or not.
- */
-function Layout() {
+const Layout = () => {
   const isNonMobile = useMediaQuery("(min-width: 600px)");
-  const [isSidebarOpen, setisSidebarOpen] = React.useState(true);
-
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const userId = useSelector((state) => state.global.userId);
+  const { data: user } = useGetUserQuery(userId) || {};
   return (
     <Box display={isNonMobile ? "flex" : "block"} width="100%" height="100%">
       <Sidebar
+        user={user || {}} // add empty object as default
         isNonMobile={isNonMobile}
         drawerWidth="250px"
         isSidebarOpen={isSidebarOpen}
-        setisSidebarOpen={setisSidebarOpen}
+        setIsSidebarOpen={setIsSidebarOpen}
       />
-      <Box>
+      <Box flexGrow={1}>
         <Navbar
+          user={user || {}} // add empty object as default
           isSidebarOpen={isSidebarOpen}
-          setisSidebarOpen={setisSidebarOpen}
+          setIsSidebarOpen={setIsSidebarOpen}
         />
+        <Outlet />
       </Box>
     </Box>
   );
-}
+};
 
 export default Layout;
 
